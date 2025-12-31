@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RideController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\MapsController;
+use App\Http\Controllers\SavedLocationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,11 +18,11 @@ use App\Http\Controllers\StudentController;
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
-// Maps Proxy Routes
-Route::get('/maps/autocomplete', [App\Http\Controllers\MapsController::class, 'autocomplete']);
-Route::get('/maps/details', [App\Http\Controllers\MapsController::class, 'details']);
-Route::get('/maps/reverse', [App\Http\Controllers\MapsController::class, 'reverse']);
-Route::get('/maps/directions', [App\Http\Controllers\MapsController::class, 'directions']);
+// Maps Proxy Routes - Moved outside middleware
+Route::get('/maps/autocomplete', [MapsController::class, 'autocomplete']);
+Route::get('/maps/details', [MapsController::class, 'details']);
+Route::get('/maps/reverse', [MapsController::class, 'reverse']);
+Route::get('/maps/directions', [MapsController::class, 'directions']);
 
 // Rides (Public for demo)
 Route::post('/rides/search', [RideController::class, 'search']);
@@ -30,18 +32,14 @@ Route::post('/rides/accept', [RideController::class, 'accept']);
 Route::get('/rides/status', [RideController::class, 'status']);
 
 // Saved Locations (Public for demo/mock)
-Route::post('/locations', [App\Http\Controllers\SavedLocationController::class, 'store']);
-Route::get('/locations', [App\Http\Controllers\SavedLocationController::class, 'index']);
-Route::delete('/locations/{id}', [App\Http\Controllers\SavedLocationController::class, 'destroy']);
+Route::post('/locations', [SavedLocationController::class, 'store']);
+Route::get('/locations', [SavedLocationController::class, 'index']);
+Route::delete('/locations/{id}', [SavedLocationController::class, 'destroy']);
 
 
 // Protected Routes
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
-
-
-
-
 
     // Parent Routes
     Route::get('/students', [StudentController::class, 'index']);
