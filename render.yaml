@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: school-cab-api
+    env: php
+    region: singapore
+    plan: free
+    buildCommand: composer install --no-dev --optimize-autoloader
+    startCommand: heroku-php-apache2 public/
+    envVars:
+      - key: APP_KEY
+        sync: false
+      - key: APP_DEBUG
+        value: false
+      - key: APP_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: school-cab-db
+          property: connectionString
+
+databases:
+  - name: school-cab-db
+    region: singapore
+    plan: free
+    databaseName: school_cab
+    user: school_cab_user
+
